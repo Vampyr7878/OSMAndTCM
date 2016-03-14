@@ -211,15 +211,15 @@ task validateTranslate {
 }
 
 task collectVoiceAssets(type: Sync) {
-	from "../../resources/voice"
+	from "../resources/voice"
 	into "assets/voice"
 	include "**/*.p"
 }
 
 
 task collectFonts(type: Copy) {
-	from "../../resources/fonts"
-	from "../../resources/rendering_styles/fonts/OpenSans"
+	from "../resources/fonts"
+	from "../resources/rendering_styles/fonts/OpenSans"
 	into "assets/fonts"
 	include "*.ttf"
 }
@@ -248,35 +248,35 @@ task collectHelpContentsAssets(type: Copy) {
 }
 
 task collectRoutingResources(type: Sync) {
-	from "../../resources/routing"
+	from "../resources/routing"
 	into "src/net/osmand/router"
 	include "*.xml"
 }
 
 task collectMiscResources(type: Copy) {
 	into "src/net/osmand/osm"
-	from("../../resources/obf_creation") {
+	from("../resources/obf_creation") {
 		include "rendering_types.xml"
 	}
-	from("../../resources/poi") {
+	from("../resources/poi") {
 		include "poi_types.xml"
 	}
 }
 
 task collectRenderingStylesResources(type: Sync) {
-	from "../../resources/rendering_styles"
+	from "../resources/rendering_styles"
 	into "src/net/osmand/render"
 	include "*.xml"
 }
 
 task collectRegionsInfoResources(type: Copy) {
-	from "../../resources/countries-info"
+	from "../resources/countries-info"
 	into "src/net/osmand/map"
 	include "regions.ocbf"
 }
 
 task copyStyleIcons(type: Copy) {
-	from "../../resources/rendering_styles/style-icons/"
+	from "../resources/rendering_styles/style-icons/"
 	into "res/"
 	include "**/*.png"
 }
