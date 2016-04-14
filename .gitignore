@@ -9,7 +9,6 @@ out/
 *.iml
 
 # Gradle
-.gradle
 /local.properties
 
 # MacOSX

@@ -2134,4 +2134,6 @@
     <string name="storage_directory_readonly_desc">Wybrany katalog przechowywania danych umożliwia tylko ich odczyt. Katalog przechowywania został tymczasowo umieszczony w pamięci wewnętrznej. Proszę wybrać prawidłowy katalog przechowywania danych.</string>
     <string name="storage_directory_shared">Pamięć współdzielona</string>
     <string name="osm_live_subscribe_btn">Zasubskrybuj</string>
+    <string name="osmand_tram_plugin_name">Tramwaje</string>
+    <string name="osmand_tram_plugin_description">Pokazuje trasy tramwajowe</string>
     </resources>
