@@ -2136,4 +2136,5 @@
     <string name="osm_live_subscribe_btn">Zasubskrybuj</string>
     <string name="osmand_tram_plugin_name">Tramwaje</string>
     <string name="osmand_tram_plugin_description">Pokazuje trasy tramwajowe</string>
+    <string name="osmand_tram_plugin_widget">Tramwaje</string>
     </resources>
