@@ -3,6 +3,7 @@ package net.osmand.plus.tramplugin;
 import android.app.Activity;
 import android.content.DialogInterface;
 import android.support.v7.app.AlertDialog;
+import android.util.Log;
 import android.view.View;
 
 import net.osmand.plus.ApplicationMode;
@@ -35,19 +36,25 @@ public class TramPlugin extends OsmandPlugin {
     private final CommonPreference<Float> tramLon;
     private XmlPullParser xmlParser;
     private ArrayList<TramStop> stops;
+    private ArrayList<TramStop> activeStops;
     private TextInfoWidget tramControl;
     private TramLayer tramLayer;
+    private String line;
+    private String direction;
+    private TramVariant variant;
 
     private OsmandApplication app;
 
     public TramPlugin(OsmandApplication app) {
         this.app = app;
+        direction = "";
         ApplicationMode.regWidget("tram.widget", ApplicationMode.DEFAULT);
         OsmandSettings set = app.getSettings();
         tramLat = set.registerFloatPreference(TRAM_LAT, 0f).makeGlobal();
         tramLon = set.registerFloatPreference(TRAM_LON, 0f).makeGlobal();
         xmlParser = app.getApplicationContext().getResources().getXml(R.xml.stops);
         stops = new ArrayList<>();
+        activeStops = new ArrayList<>();
         String name;
         float lat1, lon1;
         float lat2, lon2;
@@ -161,14 +168,14 @@ public class TramPlugin extends OsmandPlugin {
         tramControl.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                showDialog(activity);
+                showLineDialog(activity);
             }
         });
         tramControl.setIcons(R.drawable.mx_railway_tram_stop, R.drawable.mm_railway_tram_stop);
         return tramControl;
     }
 
-    private void showDialog(final MapActivity activity) {
+    private void showLineDialog(final MapActivity activity) {
         AlertDialog.Builder bld = new AlertDialog.Builder(activity);
         final ArrayList<String> list = new ArrayList<String>();
         list.add("2");
@@ -182,14 +189,66 @@ public class TramPlugin extends OsmandPlugin {
         bld.setItems(items, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                tramControl.setText(list.get(which), "");
+                line = list.get(which);
+                showDirectionDialog(activity);
             }
         });
         bld.show();
     }
 
-    public ArrayList<TramStop> getStops() {
-        return stops;
+    private void showDirectionDialog(final MapActivity activity) {
+        AlertDialog.Builder bld = new AlertDialog.Builder(activity);
+        final ArrayList<String> list = new ArrayList<String>();
+        list.add("1");
+        list.add("2");
+        String[] items = new String[list.size()];
+        for(int i = 0; i < items.length; i++) {
+            items[i] = list.get(i);
+        }
+        bld.setItems(items, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                direction = list.get(which);
+                tramControl.setText(line + "(" + direction + ")", "");
+                variant = new TramVariant(line, direction, app.getApplicationContext());
+                fillActiveStops();
+            }
+        });
+        bld.show();
+    }
+
+    private void fillActiveStops() {
+        activeStops.clear();
+        ArrayList<String> names = variant.getNames();
+        ArrayList<String> route = variant.getRoute();
+        int index;
+        for(int i = 1; i < names.size(); i++) {
+            Log.d(TramPlugin.class.getSimpleName(), route.get(i));
+            if(!route.get(i).equals("")) {
+                index = FindStop(names.get(i));
+                if(index >= 0) {
+                    activeStops.add(stops.get(index));
+                }
+            }
+        }
+    }
+
+    private int FindStop(String name) {
+        for(int i = 0; i < stops.size(); i++)
+        {
+            if(stops.get(i).getName().equals(name)) {
+                return i;
+            }
+        }
+        return -1;
+    }
+
+    public ArrayList<TramStop> getActiveStops() {
+        return activeStops;
+    }
+
+    public String getDirection() {
+        return direction;
     }
 
     @Override

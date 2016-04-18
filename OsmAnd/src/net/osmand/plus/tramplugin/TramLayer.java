@@ -74,10 +74,17 @@ public class TramLayer extends OsmandMapLayer implements ContextMenuLayer.IConte
 
     @Override
     public void onDraw(Canvas canvas, RotatedTileBox tileBox, DrawSettings settings) {
-        ArrayList<TramStop> stops = plugin.getStops();
+        ArrayList<TramStop> stops = plugin.getActiveStops();
         for(TramStop stop : stops) {
-            DrawStop(canvas, tileBox, stop.getLon1(), stop.getLat1());
-            DrawStop(canvas, tileBox, stop.getLon2(), stop.getLat2());
+            switch (plugin.getDirection())
+            {
+                case "1":
+                    DrawStop(canvas, tileBox, stop.getLon1(), stop.getLat1());
+                    break;
+                case "2":
+                    DrawStop(canvas, tileBox, stop.getLon2(), stop.getLat2());
+                    break;
+            }
         }
     }
 
