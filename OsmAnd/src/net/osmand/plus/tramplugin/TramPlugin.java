@@ -7,12 +7,16 @@ import android.util.Log;
 import android.view.View;
 
 import net.osmand.plus.ApplicationMode;
+import net.osmand.plus.GPXUtilities;
 import net.osmand.plus.OsmandApplication;
 import net.osmand.plus.OsmandPlugin;
 import net.osmand.plus.OsmandSettings;
 import net.osmand.plus.OsmandSettings.CommonPreference;
 import net.osmand.plus.R;
 import net.osmand.plus.activities.MapActivity;
+import net.osmand.plus.osmo.OsMoPlugin;
+import net.osmand.plus.routepointsnavigation.RoutePointsPlugin;
+import net.osmand.plus.routing.RoutingHelper;
 import net.osmand.plus.views.MapInfoLayer;
 import net.osmand.plus.views.OsmandMapTileView;
 import net.osmand.plus.views.mapwidgets.TextInfoWidget;
