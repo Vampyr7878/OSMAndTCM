@@ -109,10 +109,6 @@
 			<lat>54.3371499</lat>
 			<lon>18.6172042</lon>
 		</coords>
-		<coords>
-			<lat>54.337748</lat>
-			<lon>18.6177477</lon>
-		</coords>
 	</stop>
 	<stop>
 		<name>Chłopska - Obrońców Wybrzeża</name>
@@ -274,14 +270,6 @@
 			<lat>54.4232799</lat>
 			<lon>18.5926425</lon>
 		</coords>
-		<coords>
-			<lat>54.4233225</lat>
-			<lon>18.592591</lon>
-		</coords>
-		<coords>
-			<lat>54.4233618</lat>
-			<lon>18.5918357</lon>
-		</coords>
 	</stop>
 	<stop>
 		<name>Klonowa</name>
@@ -297,12 +285,12 @@
 	<stop>
 		<name>Kołobrzeska</name>
 		<coords>
-			<lat>54.3967138</lat>
-			<lon>18.5980318</lon>
+			<lat>54.40346</lat>
+			<lon>18.59150</lon>
 		</coords>
 		<coords>
-			<lat>54.3970427</lat>
-			<lon>18.5975689</lon>
+			<lat>54.40428</lat>
+			<lon>18.59104</lon>
 		</coords>
 	</stop>
 	<stop>
@@ -336,10 +324,6 @@
 		<coords>
 			<lat>54.383356</lat>
 			<lon>18.6205924</lon>
-		</coords>
-		<coords>
-			<lat>54.3840497</lat>
-			<lon>18.6219698</lon>
 		</coords>
 	</stop>
 	<stop>
@@ -421,6 +405,17 @@
 		<coords>
 			<lat>54.4138914</lat>
 			<lon>18.5656889</lon>
+		</coords>
+	</stop>
+	<stop>
+		<name>Opera Bałtycka</name>
+		<coords>
+			<lat>54.37199</lat>
+			<lon>18.62475</lon>
+		</coords>
+		<coords>
+			<lat>54.37204</lat>
+			<lon>18.62487</lon>
 		</coords>
 	</stop>
 	<stop>
@@ -576,10 +571,6 @@
 			<lat>54.3481142</lat>
 			<lon>18.6070481</lon>
 		</coords>
-		<coords>
-			<lat>54.3483448</lat>
-			<lon>18.6072114</lon>
-		</coords>
 	</stop>
 	<stop>
 		<name>Sikorskiego</name>
@@ -616,6 +607,10 @@
 	</stop>
 	<stop>
 		<name>Strzyża</name>
+		<coords>
+			<lat>54.3912981</lat>
+			<lon>18.5785275</lon>
+		</coords>
 		<coords>
 			<lat>54.3912981</lat>
 			<lon>18.5785275</lon>
