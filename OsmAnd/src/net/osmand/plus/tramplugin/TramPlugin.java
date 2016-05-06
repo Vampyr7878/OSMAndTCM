@@ -46,6 +46,7 @@ public class TramPlugin extends OsmandPlugin {
     private String line;
     private String direction;
     private TramVariant variant;
+    private ArrayList distance;
 
     private OsmandApplication app;
 
@@ -59,9 +60,14 @@ public class TramPlugin extends OsmandPlugin {
         xmlParser = app.getApplicationContext().getResources().getXml(R.xml.stops);
         stops = new ArrayList<>();
         activeStops = new ArrayList<>();
+        distance = new ArrayList<>();
         String name;
         float lat1, lon1;
         float lat2, lon2;
+
+
+
+
         while (true)
         {
             name = getString("name");
@@ -74,8 +80,20 @@ public class TramPlugin extends OsmandPlugin {
             lat2 = getFloat("lat");
             lon2 = getFloat("lon");
             stops.add(new TramStop(name, lat1, lon1, lat2, lon2));
+
         }
     }
+
+    private void getDistance(float lat, float lon) {
+        distance.clear();
+        double dist;
+        for (int i = 0; i < stops.size(); i++){
+        dist = Math.sqrt((lat - stops.get(i).getLat1()) * (lat - stops.get(i).getLat1()) + (lon - stops.get(i).getLon1())*(lon - stops.get(i).getLon1()));
+        distance.add(dist);
+        }
+    }
+
+
 
     private String getString(String tag) {
         String text ="";
