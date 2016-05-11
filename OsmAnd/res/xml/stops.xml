@@ -1,17 +1,6 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <stops>
 	<stop>
-		<name>Abrahama</name>
-		<coords>
-			<lat>54.3911956</lat>
-			<lon>18.5776677</lon>
-		</coords>
-		<coords>
-			<lat>54.3911985</lat>
-			<lon>18.5776149</lon>
-		</coords>
-	</stop>
-	<stop>
 		<name>Bajana</name>
 		<coords>
 			<lat>54.3896452</lat>
@@ -177,17 +166,6 @@
 		</coords>
 	</stop>
 	<stop>
-		<name>Dworzec PKS</name>
-		<coords>
-			<lat>54.3566863</lat>
-			<lon>18.6434162</lon>
-		</coords>
-		<coords>
-			<lat>54.3566735</lat>
-			<lon>18.6433679</lon>
-		</coords>
-	</stop>
-	<stop>
 		<name>Galeria Bałtycka</name>
 		<coords>
 			<lat>54.3821912</lat>
@@ -346,17 +324,6 @@
 		<coords>
 			<lat>54.37580864</lat>
 			<lon>18.6152462</lon>
-		</coords>
-	</stop>
-	<stop>
-		<name>Nowe Ogrody</name>
-		<coords>
-			<lat>54.3520746</lat>
-			<lon>18.6421896</lon>
-		</coords>
-		<coords>
-			<lat>54.3526483</lat>
-			<lon>18.6423314</lon>
 		</coords>
 	</stop>
 	<stop>

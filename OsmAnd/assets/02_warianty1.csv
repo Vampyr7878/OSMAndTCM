@@ -17,16 +17,6 @@
 16;P(2009);ZTM;Uniwersytet Medyczny;1
 17;P(2011);ZTM;Traugutta;1
 18;P(2013);ZTM;Opera Bałtycka;2
-19;P(2015),1,I,H;ZTM;Opera Bałtycka;
-20;P(2017),1,I,H;ZTM;Politechnika;
-21;P(2019),1,I,H;ZTM;Miszewskiego;
-22;P(2021),1,I,H;ZTM;Jaśkowa Dolina;
-23;P(2023),1,I,H;ZTM;Klonowa;
-24;P(2025),1,I,H;ZTM;Galeria Bałtycka;
-25;P(2027),1,I,H;ZTM;Wojska Polskiego;
-26;P(2029),1,I,H;ZTM;Zamenhofa;
-27;P(2031),1,I,H;ZTM;Zajezdnia;
-28;P(213),1,I,H;ZTM;Strzyża PKM;
 29;P(2071);ZTM;Wyspiańskiego;3
 30;P(2073);ZTM;Reja;1
 31;P(2075);ZTM;Mickiewicza;2
@@ -42,25 +32,8 @@
 41;P(2095);ZTM;Jagiellońska;2
 42;P(2097);ZTM;Piastowska;1
 43;P(2099);ZTM;Pomorska;2
-44;P(2055),1,I;ZTM;Osiedle Wejhera;
-45;P(2057),1,I;ZTM;Helska;
-46;P(201),1,I;ZTM;Jelitkowo;
 47;P(2054);ZTM;Gospody;1
 48;P(2052);ZTM;Pomorska - Osiedle;1
 49;P(2050);ZTM;Subisława;2
 50;P(2048);ZTM;Opacka;2
 51;B,N,K0,P(202);ZTM;Oliwa;3
-52;P(2046),1,I,H;ZTM;Oliwa;
-53;P(2044),1,I,H;ZTM;Obrońców Westerplatte;
-54;P(2042),1,I,H;ZTM;Derdowskiego;
-55;P(2040),1,I,H;ZTM;Tetmajera;
-56;P(2038),1,I,H;ZTM;Bażyńskiego;
-57;P(2036),1,I,H;ZTM;Uniwersytet;
-58;P(2034),1,I,H;ZTM;Strzyża PKM;
-59;P(2033),1,I,H;ZTM;Strzyża PKM;
-60;P(2035),1,I,H;ZTM;Uniwersytet;
-61;P(2037),1,I,H;ZTM;Bażyńskiego;
-62;P(2039),1,I,H;ZTM;Tetmajera;
-63;P(2041),1,I,H;ZTM;Derdowskiego;
-64;P(2043),1,I,H;ZTM;Obrońców Westerplatte;
-65;B,N,K,P(202),1,I,H;ZTM;Oliwa;
