@@ -6,17 +6,14 @@ import android.support.v7.app.AlertDialog;
 import android.util.Log;
 import android.view.View;
 
+import net.osmand.Location;
 import net.osmand.plus.ApplicationMode;
-import net.osmand.plus.GPXUtilities;
 import net.osmand.plus.OsmandApplication;
 import net.osmand.plus.OsmandPlugin;
 import net.osmand.plus.OsmandSettings;
 import net.osmand.plus.OsmandSettings.CommonPreference;
 import net.osmand.plus.R;
 import net.osmand.plus.activities.MapActivity;
-import net.osmand.plus.osmo.OsMoPlugin;
-import net.osmand.plus.routepointsnavigation.RoutePointsPlugin;
-import net.osmand.plus.routing.RoutingHelper;
 import net.osmand.plus.views.MapInfoLayer;
 import net.osmand.plus.views.OsmandMapTileView;
 import net.osmand.plus.views.mapwidgets.TextInfoWidget;
@@ -26,6 +23,8 @@ import org.xmlpull.v1.XmlPullParserException;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
 /**
  * Created by Wojciech on 2016-04-10.
@@ -46,7 +45,9 @@ public class TramPlugin extends OsmandPlugin {
     private String line;
     private String direction;
     private TramVariant variant;
-    private ArrayList distance;
+    private ArrayList<Float> distance;
+    private Location location;
+    private int startStop;
 
     private OsmandApplication app;
 
@@ -64,10 +65,7 @@ public class TramPlugin extends OsmandPlugin {
         String name;
         float lat1, lon1;
         float lat2, lon2;
-
-
-
-
+        //Log.d("TRAM", Double.toString(app.getLocationProvider().getLastKnownLocation().getLatitude()));
         while (true)
         {
             name = getString("name");
@@ -80,20 +78,17 @@ public class TramPlugin extends OsmandPlugin {
             lat2 = getFloat("lat");
             lon2 = getFloat("lon");
             stops.add(new TramStop(name, lat1, lon1, lat2, lon2));
-
         }
     }
 
     private void getDistance(float lat, float lon) {
         distance.clear();
         double dist;
-        for (int i = 0; i < stops.size(); i++){
-        dist = Math.sqrt((lat - stops.get(i).getLat1()) * (lat - stops.get(i).getLat1()) + (lon - stops.get(i).getLon1())*(lon - stops.get(i).getLon1()));
-        distance.add(dist);
+        for (int i = 0; i < stops.size(); i++) {
+            dist = Math.sqrt((lat - stops.get(i).getLat1()) * (lat - stops.get(i).getLat1()) + (lon - stops.get(i).getLon1())*(lon - stops.get(i).getLon1()));
+            distance.add((float)dist);
         }
     }
-
-
 
     private String getString(String tag) {
         String text ="";
@@ -139,6 +134,26 @@ public class TramPlugin extends OsmandPlugin {
         return number;
     }
 
+    private int min(ArrayList<Float> list) {
+        int index = 0;
+        for(int i = 1; i < list.size(); i++) {
+            if(list.get(index) > list.get(i)) {
+                index = i;
+            }
+        }
+        return index;
+    }
+
+    @Override
+    public void updateLocation(Location location) {
+        if(location == null) {
+            location = app.getLocationProvider().getLastKnownLocation();
+        } else {
+            getDistance((float) location.getLatitude(), (float) location.getLongitude());
+            startStop = min(distance);
+        }
+    }
+
     @Override
      public void updateLayers(OsmandMapTileView mapView, MapActivity activity) {
         if(isActive()) {
@@ -176,13 +191,13 @@ public class TramPlugin extends OsmandPlugin {
     }
 
     private void registerWidget(MapActivity activity) {
-        MapInfoLayer mapInfoLayer = activity.getMapLayers().getMapInfoLayer();
-        if (mapInfoLayer != null) {
-            tramControl = createTramControl(activity);
-            mapInfoLayer.registerSideWidget(tramControl, R.drawable.mm_tram_stop_small, R.string.osmand_tram_plugin_widget , "tram.widget", false, 21);
-            mapInfoLayer.recreateControls();
-            tramControl.setText("Tram", "");
-        }
+//        MapInfoLayer mapInfoLayer = activity.getMapLayers().getMapInfoLayer();
+//        if (mapInfoLayer != null) {
+//            tramControl = createTramControl(activity);
+//            mapInfoLayer.registerSideWidget(tramControl, R.drawable.mm_tram_stop_small, R.string.osmand_tram_plugin_widget , "tram.widget", false, 21);
+//            mapInfoLayer.recreateControls();
+//            tramControl.setText("Tram", "");
+//        }
     }
 
     private TextInfoWidget createTramControl(final MapActivity activity) {
@@ -265,8 +280,16 @@ public class TramPlugin extends OsmandPlugin {
         return -1;
     }
 
+    public ArrayList<TramStop> getStops() {
+        return stops;
+    }
+
     public ArrayList<TramStop> getActiveStops() {
         return activeStops;
+    }
+
+    public int getStartStop() {
+        return startStop;
     }
 
     public String getDirection() {

@@ -79,57 +79,46 @@ public class TramLayer extends OsmandMapLayer implements ContextMenuLayer.IConte
 
     @Override
     public void onDraw(Canvas canvas, RotatedTileBox tileBox, DrawSettings settings) {
-        ArrayList<TramStop> stops = plugin.getActiveStops();
-        for(int i = 1; i < stops.size(); i++) {
-            switch (plugin.getDirection()) {
-                case "1":
-                    DrawLine(canvas, tileBox, stops.get(i-1).getLon1(), stops.get(i-1).getLat1(), stops.get(i).getLon1(), stops.get(i).getLat1());
-                    break;
-                case "2":
-                    DrawLine(canvas, tileBox, stops.get(i-1).getLon2(), stops.get(i-1).getLat2(), stops.get(i).getLon2(), stops.get(i).getLat2());
-                    break;
-            }
-        }
-        for(TramStop stop : stops) {
-            switch (plugin.getDirection()) {
-                case "1":
-                    DrawStop(canvas, tileBox, stop.getLon1(), stop.getLat1());
-                    break;
-                case "2":
-                    DrawStop(canvas, tileBox, stop.getLon2(), stop.getLat2());
-                    break;
-            }
-        }
+        ArrayList<TramStop> stops = plugin.getStops();
+        int index = plugin.getStartStop();
+        DrawStop(canvas, tileBox, stops.get(index).getLon1(), stops.get(index).getLat1());
+//        for(int i = 1; i < stops.size(); i++) {
+//            switch (plugin.getDirection()) {
+//                case "1":
+//                    DrawLine(canvas, tileBox, stops.get(i-1).getLon1(), stops.get(i-1).getLat1(), stops.get(i).getLon1(), stops.get(i).getLat1());
+//                    break;
+//                case "2":
+//                    DrawLine(canvas, tileBox, stops.get(i-1).getLon2(), stops.get(i-1).getLat2(), stops.get(i).getLon2(), stops.get(i).getLat2());
+//                    break;
+//            }
+//        }
+//        for(TramStop stop : stops) {
+//            switch (plugin.getDirection()) {
+//                case "1":
+//                    DrawStop(canvas, tileBox, stop.getLon1(), stop.getLat1());
+//                    break;
+//                case "2":
+//                    DrawStop(canvas, tileBox, stop.getLon2(), stop.getLat2());
+//                    break;
+//            }
+//        }
     }
 
     private void DrawStop(Canvas canvas, RotatedTileBox tileBox, float lon, float lat) {
-        if (isLocationVisible(tileBox, lat, lon)) {
-            int marginX = icon.getWidth() / 2;
-            int marginY = icon.getHeight() / 2;
-            int locationX = tileBox.getPixXFromLonNoRot(lon);
-            int locationY = tileBox.getPixYFromLatNoRot(lat);
-            canvas.rotate(-view.getRotate(), locationX, locationY);
-            canvas.drawBitmap(icon, locationX - marginX, locationY - marginY, bitmapPaint);
-        }
+        int marginX = icon.getWidth() / 2;
+        int marginY = icon.getHeight() / 2;
+        int locationX = tileBox.getPixXFromLonNoRot(lon);
+        int locationY = tileBox.getPixYFromLatNoRot(lat);
+        canvas.rotate(-view.getRotate(), locationX, locationY);
+        canvas.drawBitmap(icon, locationX - marginX, locationY - marginY, bitmapPaint);
     }
 
     private void DrawLine(Canvas canvas, RotatedTileBox tileBox, float lon1, float lat1, float lon2, float lat2) {
-        if (isLocationVisible(tileBox, lat1, lon1) || isLocationVisible(tileBox, lat2, lon2)) {
-            int location1X = tileBox.getPixXFromLonNoRot(lon1);
-            int location1Y = tileBox.getPixYFromLatNoRot(lat1);
-            int location2X = tileBox.getPixXFromLonNoRot(lon2);
-            int location2Y = tileBox.getPixYFromLatNoRot(lat2);
-            //canvas.rotate(-view.getRotate(), locationX, locationY);
-            //canvas.drawBitmap(icon, locationX - marginX, locationY - marginY, bitmapPaint);
-            canvas.drawLine(location1X, location1Y, location2X, location2Y, linePaint);
-        }
-    }
-
-    private boolean isLocationVisible(RotatedTileBox tb, double latitude, double longitude){
-        if(view == null) {
-            return false;
-        }
-        return tb.containsLatLon(latitude, longitude);
+        int location1X = tileBox.getPixXFromLonNoRot(lon1);
+        int location1Y = tileBox.getPixYFromLatNoRot(lat1);
+        int location2X = tileBox.getPixXFromLonNoRot(lon2);
+        int location2Y = tileBox.getPixYFromLatNoRot(lat2);
+        canvas.drawLine(location1X, location1Y, location2X, location2Y, linePaint);
     }
 
     @Override
