@@ -8,12 +8,14 @@ import android.view.View;
 
 import net.osmand.Location;
 import net.osmand.plus.ApplicationMode;
+import net.osmand.plus.MapMarkersHelper.MapMarker;
 import net.osmand.plus.OsmandApplication;
 import net.osmand.plus.OsmandPlugin;
 import net.osmand.plus.OsmandSettings;
 import net.osmand.plus.OsmandSettings.CommonPreference;
 import net.osmand.plus.R;
 import net.osmand.plus.activities.MapActivity;
+import net.osmand.plus.views.DoubleTapScaleDetector;
 import net.osmand.plus.views.MapInfoLayer;
 import net.osmand.plus.views.OsmandMapTileView;
 import net.osmand.plus.views.mapwidgets.TextInfoWidget;
@@ -47,7 +49,9 @@ public class TramPlugin extends OsmandPlugin {
     private TramVariant variant;
     private ArrayList<Float> distance;
     private Location location;
+    private List<MapMarker> destination;
     private int startStop;
+    private int endStop;
 
     private OsmandApplication app;
 
@@ -65,7 +69,6 @@ public class TramPlugin extends OsmandPlugin {
         String name;
         float lat1, lon1;
         float lat2, lon2;
-        //Log.d("TRAM", Double.toString(app.getLocationProvider().getLastKnownLocation().getLatitude()));
         while (true)
         {
             name = getString("name");
@@ -151,6 +154,15 @@ public class TramPlugin extends OsmandPlugin {
         } else {
             getDistance((float) location.getLatitude(), (float) location.getLongitude());
             startStop = min(distance);
+        }
+        if(destination == null) {
+            destination = app.getMapMarkersHelper().getActiveMapMarkers();
+        } else if(destination.size() == 1) {
+            getDistance((float) destination.get(0).getLatitude(), (float) destination.get(0).getLongitude());
+            endStop = min(distance);
+            Log.d("TRAM", Double.toString(destination.get(0).getLatitude()) + " " + Double.toString(destination.get(0).getLongitude()));
+        } else if(destination.size() > 1) {
+            app.getMapMarkersHelper().removeMapMarker(destination.size() - 1);
         }
     }
 
@@ -290,6 +302,10 @@ public class TramPlugin extends OsmandPlugin {
 
     public int getStartStop() {
         return startStop;
+    }
+
+    public int getEndStop() {
+        return endStop;
     }
 
     public String getDirection() {

@@ -82,6 +82,8 @@ public class TramLayer extends OsmandMapLayer implements ContextMenuLayer.IConte
         ArrayList<TramStop> stops = plugin.getStops();
         int index = plugin.getStartStop();
         DrawStop(canvas, tileBox, stops.get(index).getLon1(), stops.get(index).getLat1());
+        index = plugin.getEndStop();
+        DrawStop(canvas, tileBox, stops.get(index).getLon1(), stops.get(index).getLat1());
 //        for(int i = 1; i < stops.size(); i++) {
 //            switch (plugin.getDirection()) {
 //                case "1":
