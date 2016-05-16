@@ -48,11 +48,11 @@ public class TramPlugin extends OsmandPlugin {
     private String direction;
     private TramVariant variant;
     private ArrayList<Float> distance;
-    private Location location;
+    private Location myLocation;
     private List<MapMarker> destination;
     private int startStop;
     private int endStop;
-
+    private String[] lines = {"2", "6", "11", "12"};
     private OsmandApplication app;
 
     public TramPlugin(OsmandApplication app) {
@@ -66,6 +66,8 @@ public class TramPlugin extends OsmandPlugin {
         stops = new ArrayList<>();
         activeStops = new ArrayList<>();
         distance = new ArrayList<>();
+        startStop = -1;
+        endStop = -1;
         String name;
         float lat1, lon1;
         float lat2, lon2;
@@ -149,10 +151,10 @@ public class TramPlugin extends OsmandPlugin {
 
     @Override
     public void updateLocation(Location location) {
-        if(location == null) {
-            location = app.getLocationProvider().getLastKnownLocation();
+        if(myLocation == null) {
+            myLocation = location;
         } else {
-            getDistance((float) location.getLatitude(), (float) location.getLongitude());
+            getDistance((float) myLocation.getLatitude(), (float) myLocation.getLongitude());
             startStop = min(distance);
         }
         if(destination == null) {
@@ -160,9 +162,33 @@ public class TramPlugin extends OsmandPlugin {
         } else if(destination.size() == 1) {
             getDistance((float) destination.get(0).getLatitude(), (float) destination.get(0).getLongitude());
             endStop = min(distance);
-            Log.d("TRAM", Double.toString(destination.get(0).getLatitude()) + " " + Double.toString(destination.get(0).getLongitude()));
-        } else if(destination.size() > 1) {
+        }
+        else if(destination.size() > 1) {
             app.getMapMarkersHelper().removeMapMarker(destination.size() - 1);
+        }
+        if(startStop >= 0 && endStop >= 0) {
+            FindRoute();
+        }
+    }
+
+    private void FindRoute() {
+        int start, end;
+        activeStops.clear();
+        for(int i = 0; i < 4; i++) {
+            for(int j = 1; j < 3; j++) {
+                variant = new TramVariant(lines[i], Integer.toString(j), app.getApplicationContext());
+                start = variant.getNames().indexOf(stops.get(startStop).getName());
+                end = variant.getNames().indexOf(stops.get(endStop).getName());
+                if(start >= 0 && end >= 0 && end > start)
+                {
+                    for(int k = start; k <= end; k++)
+                    {
+                        activeStops.add(stops.get(FindStop(variant.getNames().get(k))));
+                    }
+                    direction = Integer.toString(j);
+                    return;
+                }
+            }
         }
     }
 
@@ -272,7 +298,7 @@ public class TramPlugin extends OsmandPlugin {
         ArrayList<String> route = variant.getRoute();
         int index;
         for(int i = 1; i < names.size(); i++) {
-            Log.d(TramPlugin.class.getSimpleName(), route.get(i));
+            //Log.d(TramPlugin.class.getSimpleName(), route.get(i));
             if(!route.get(i).equals("")) {
                 index = FindStop(names.get(i));
                 if(index >= 0) {

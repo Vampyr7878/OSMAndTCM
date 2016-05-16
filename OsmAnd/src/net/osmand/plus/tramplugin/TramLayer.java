@@ -79,31 +79,31 @@ public class TramLayer extends OsmandMapLayer implements ContextMenuLayer.IConte
 
     @Override
     public void onDraw(Canvas canvas, RotatedTileBox tileBox, DrawSettings settings) {
-        ArrayList<TramStop> stops = plugin.getStops();
-        int index = plugin.getStartStop();
-        DrawStop(canvas, tileBox, stops.get(index).getLon1(), stops.get(index).getLat1());
-        index = plugin.getEndStop();
-        DrawStop(canvas, tileBox, stops.get(index).getLon1(), stops.get(index).getLat1());
-//        for(int i = 1; i < stops.size(); i++) {
-//            switch (plugin.getDirection()) {
-//                case "1":
-//                    DrawLine(canvas, tileBox, stops.get(i-1).getLon1(), stops.get(i-1).getLat1(), stops.get(i).getLon1(), stops.get(i).getLat1());
-//                    break;
-//                case "2":
-//                    DrawLine(canvas, tileBox, stops.get(i-1).getLon2(), stops.get(i-1).getLat2(), stops.get(i).getLon2(), stops.get(i).getLat2());
-//                    break;
-//            }
-//        }
-//        for(TramStop stop : stops) {
-//            switch (plugin.getDirection()) {
-//                case "1":
-//                    DrawStop(canvas, tileBox, stop.getLon1(), stop.getLat1());
-//                    break;
-//                case "2":
-//                    DrawStop(canvas, tileBox, stop.getLon2(), stop.getLat2());
-//                    break;
-//            }
-//        }
+        ArrayList<TramStop> stops = plugin.getActiveStops();
+//        int index = plugin.getStartStop();
+//        DrawStop(canvas, tileBox, stops.get(index).getLon1(), stops.get(index).getLat1());
+//        index = plugin.getEndStop();
+//        DrawStop(canvas, tileBox, stops.get(index).getLon1(), stops.get(index).getLat1());
+        for(int i = 1; i < stops.size(); i++) {
+            switch (plugin.getDirection()) {
+                case "1":
+                    DrawLine(canvas, tileBox, stops.get(i-1).getLon1(), stops.get(i-1).getLat1(), stops.get(i).getLon1(), stops.get(i).getLat1());
+                    break;
+                case "2":
+                    DrawLine(canvas, tileBox, stops.get(i-1).getLon2(), stops.get(i-1).getLat2(), stops.get(i).getLon2(), stops.get(i).getLat2());
+                    break;
+            }
+        }
+        for(TramStop stop : stops) {
+            switch (plugin.getDirection()) {
+                case "1":
+                    DrawStop(canvas, tileBox, stop.getLon1(), stop.getLat1());
+                    break;
+                case "2":
+                    DrawStop(canvas, tileBox, stop.getLon2(), stop.getLat2());
+                    break;
+            }
+        }
     }
 
     private void DrawStop(Canvas canvas, RotatedTileBox tileBox, float lon, float lat) {
