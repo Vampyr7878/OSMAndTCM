@@ -4,7 +4,6 @@ import android.app.Activity;
 import android.content.DialogInterface;
 import android.support.v7.app.AlertDialog;
 import android.util.Log;
-import android.view.View;
 
 import net.osmand.Location;
 import net.osmand.plus.ApplicationMode;
@@ -15,7 +14,6 @@ import net.osmand.plus.OsmandSettings;
 import net.osmand.plus.OsmandSettings.CommonPreference;
 import net.osmand.plus.R;
 import net.osmand.plus.activities.MapActivity;
-import net.osmand.plus.views.DoubleTapScaleDetector;
 import net.osmand.plus.views.MapInfoLayer;
 import net.osmand.plus.views.OsmandMapTileView;
 import net.osmand.plus.views.mapwidgets.TextInfoWidget;
@@ -25,7 +23,7 @@ import org.xmlpull.v1.XmlPullParserException;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Collections;
+import java.util.Calendar;
 import java.util.List;
 
 /**
@@ -47,12 +45,15 @@ public class TramPlugin extends OsmandPlugin {
     private String line;
     private String direction;
     private TramVariant variant;
+    private TramCourse course;
     private ArrayList<Float> distance;
     private Location myLocation;
     private List<MapMarker> destination;
     private int startStop;
     private int endStop;
     private String[] lines = {"2", "6", "11", "12"};
+    private int currentTime;
+    private int tripTime;
     private OsmandApplication app;
 
     public TramPlugin(OsmandApplication app) {
@@ -167,12 +168,15 @@ public class TramPlugin extends OsmandPlugin {
             app.getMapMarkersHelper().removeMapMarker(destination.size() - 1);
         }
         if(startStop >= 0 && endStop >= 0) {
+            Calendar c = Calendar.getInstance();
+            currentTime = 60 * c.get(Calendar.HOUR_OF_DAY) + c.get(Calendar.MINUTE);
             FindRoute();
+            Log.d("TRAM", Integer.toString(c.get(Calendar.HOUR_OF_DAY)) + ":" + Integer.toString(c.get(Calendar.MINUTE)));
         }
     }
 
     private void FindRoute() {
-        int start, end;
+        int start, end, time, hours, minutes;
         activeStops.clear();
         for(int i = 0; i < 4; i++) {
             for(int j = 1; j < 3; j++) {
@@ -181,15 +185,33 @@ public class TramPlugin extends OsmandPlugin {
                 end = variant.getNames().indexOf(stops.get(endStop).getName());
                 if(start >= 0 && end >= 0 && end > start)
                 {
+                    tripTime = 0;
                     for(int k = start; k <= end; k++)
                     {
                         activeStops.add(stops.get(FindStop(variant.getNames().get(k))));
+                        tripTime += variant.getRoute().get(k);
                     }
+                    course = new TramCourse(lines[i], Integer.toString(j), app.getApplicationContext());
+                    time = FindTime();
+                    hours = time / 60;
+                    minutes = time - hours * 60;
                     direction = Integer.toString(j);
+                    tramControl.setText("(" + lines[i] + ")" + Integer.toString(hours) + ":" +  Integer.toString(minutes), "");
                     return;
                 }
             }
         }
+    }
+
+    private int FindTime() {
+        ArrayList<Integer> times = course.getTimes();
+        int current = currentTime - tripTime + 5;
+        for(int i = 0; i < times.size(); i++) {
+            if(times.get(i) > current) {
+                return times.get(i) + tripTime;
+            }
+        }
+        return -1;
     }
 
     @Override
@@ -229,23 +251,23 @@ public class TramPlugin extends OsmandPlugin {
     }
 
     private void registerWidget(MapActivity activity) {
-//        MapInfoLayer mapInfoLayer = activity.getMapLayers().getMapInfoLayer();
-//        if (mapInfoLayer != null) {
-//            tramControl = createTramControl(activity);
-//            mapInfoLayer.registerSideWidget(tramControl, R.drawable.mm_tram_stop_small, R.string.osmand_tram_plugin_widget , "tram.widget", false, 21);
-//            mapInfoLayer.recreateControls();
-//            tramControl.setText("Tram", "");
-//        }
+        MapInfoLayer mapInfoLayer = activity.getMapLayers().getMapInfoLayer();
+        if (mapInfoLayer != null) {
+            tramControl = createTramControl(activity);
+            mapInfoLayer.registerSideWidget(tramControl, R.drawable.mm_tram_stop_small, R.string.osmand_tram_plugin_widget , "tram.widget", false, 21);
+            mapInfoLayer.recreateControls();
+            tramControl.setText("Tram", "");
+        }
     }
 
     private TextInfoWidget createTramControl(final MapActivity activity) {
         final TextInfoWidget tramControl = new TextInfoWidget(activity);
-        tramControl.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                showLineDialog(activity);
-            }
-        });
+//        tramControl.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                showLineDialog(activity);
+//            }
+//        });
         tramControl.setIcons(R.drawable.mx_railway_tram_stop, R.drawable.mm_railway_tram_stop);
         return tramControl;
     }
@@ -295,7 +317,7 @@ public class TramPlugin extends OsmandPlugin {
     private void fillActiveStops() {
         activeStops.clear();
         ArrayList<String> names = variant.getNames();
-        ArrayList<String> route = variant.getRoute();
+        ArrayList<Integer> route = variant.getRoute();
         int index;
         for(int i = 1; i < names.size(); i++) {
             //Log.d(TramPlugin.class.getSimpleName(), route.get(i));

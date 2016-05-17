@@ -13,7 +13,7 @@ import java.util.ArrayList;
 public class TramVariant {
 
     private ArrayList<String> names;
-    private ArrayList<String> route;
+    private ArrayList<Integer> route;
 
     public TramVariant(String line, String direction, Context context) {
         String[] next;
@@ -21,6 +21,7 @@ public class TramVariant {
         route = new ArrayList<>();
         try {
             CSVReader reader = new CSVReader(new InputStreamReader(context.getAssets().open("0" + line + "_warianty" + direction + ".csv")));
+            next = reader.readNext();
             while(true) {
                 next = reader.readNext();
                 if(next == null) {
@@ -28,7 +29,7 @@ public class TramVariant {
                 }
                 else {
                     names.add(next[3]);
-                    route.add(next[4]);
+                    route.add(Integer.parseInt(next[4]));
                 }
             }
         } catch (IOException e) {
@@ -40,7 +41,7 @@ public class TramVariant {
         return names;
     }
 
-    public ArrayList<String> getRoute() {
+    public ArrayList<Integer> getRoute() {
         return route;
     }
 }
